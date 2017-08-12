@@ -1,0 +1,16 @@
+[
+{
+  "modid": "blockprotectfieldgenerator",
+  "name": "Block Protect Field Generator",
+  "description": "Protect an area (place/remove/interact with blocks) with a field generator.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ImagicTheCat"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
