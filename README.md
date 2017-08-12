@@ -1,11 +1,11 @@
 
 # Block Protect Field Generator
 
-A simple mod which add a block to protect a fixed area in a RP way for multiplayer servers, slightly inspired from the tool cupboard of Rust (also designed to work on a Davinci vessels).
+A simple mod which add a block to protect a fixed area in a RP way for multiplayer servers, slightly inspired from the tool cupboard from Rust (also designed to work on a Davinci vessels).
 
 ## Craft
 
-!(/doc/images/craft.png?raw=true)
+![Craft](/doc/images/craft.png?raw=true)
 
 ## Usage
 
