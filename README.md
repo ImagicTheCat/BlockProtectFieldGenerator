@@ -3,6 +3,10 @@
 
 A simple mod which add a block to protect a fixed area in a RP way for multiplayer servers, slightly inspired from the tool cupboard from Rust (also designed to work on a Davinci vessels).
 
+## Install
+
+Add the jar to `mods/` on the server and the client.
+
 ## Craft
 
 ![Craft](/doc/images/craft.png?raw=true)
