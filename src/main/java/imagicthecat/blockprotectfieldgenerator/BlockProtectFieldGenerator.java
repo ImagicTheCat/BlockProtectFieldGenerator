@@ -1,5 +1,6 @@
 package imagicthecat.blockprotectfieldgenerator;
 
+import imagicthecat.blockprotectfieldgenerator.shared.Command;
 import imagicthecat.blockprotectfieldgenerator.shared.ForgeEventHandler;
 import imagicthecat.blockprotectfieldgenerator.shared.block.BlockFieldGenerator;
 import imagicthecat.blockprotectfieldgenerator.shared.capability.IStrings;
@@ -20,6 +21,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -56,5 +58,10 @@ public class BlockProtectFieldGenerator
 	  	Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
 	  	.register(Item.getItemFromBlock(block_generator), 0, new ModelResourceLocation("blockprotectfieldgenerator:generator", "inventory"));
     }
+  }
+  
+  @EventHandler
+  public void serverLoad(FMLServerStartingEvent event){
+  	event.registerServerCommand(new Command());
   }
 }
