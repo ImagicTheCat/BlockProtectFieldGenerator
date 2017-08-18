@@ -66,7 +66,7 @@ public class Tools {
 			for(BlockPos bpos : blocks){
 				//check if a not allowed generator is present
 				TileFieldGenerator tile = (TileFieldGenerator) player.worldObj.getTileEntity(bpos);
-				if(tile != null && !tile.isAllowed(player.getName())){
+				if(!(player.worldObj.isBlockIndirectlyGettingPowered(bpos) > 0) && tile != null && !tile.isAllowed(player.getName())){
 					allowed = false;
 					break;
 				}
