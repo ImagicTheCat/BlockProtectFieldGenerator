@@ -31,14 +31,12 @@ public class BlockProtectFieldGenerator
   
   public static Block block_generator;
   
-  public void regBlock(String idname, Block block)
+  @EventHandler
+  public void preInit(FMLPreInitializationEvent event)
   {
-  	GameRegistry.registerBlock(block_generator, "blockprotectfieldgenerator:generator");
-  	
-    if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
-	  	Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-	  	.register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(idname, "inventory"));
-    }
+   	block_generator = new BlockFieldGenerator();
+   	GameRegistry.registerBlock(block_generator, "blockprotectfieldgenerator:generator");
+   	GameRegistry.registerTileEntity(TileFieldGenerator.class, "blockprotectfieldgenerator:generator");
   }
 
   @EventHandler
@@ -46,21 +44,17 @@ public class BlockProtectFieldGenerator
   {
     MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
     //CapabilityManager.INSTANCE.register(IStrings.class, new StringsStorage(), Strings.class);
-    
-   
-  	block_generator = new BlockFieldGenerator();
-  	regBlock("blockprotectfieldgenerator:generator", block_generator);
-  	GameRegistry.registerTileEntity(TileFieldGenerator.class, "blockprotectfieldgenerator:generator");
   	
 		GameRegistry.addRecipe(new ItemStack(block_generator),
 		  "A A",
 		  " B ",
 		  "A A",
-		  'A', Blocks.obsidian, 'B', Items.redstone);
-  }
-  
-  @EventHandler
-  public void preInit(FMLPreInitializationEvent event)
-  {
+		  'A', Blocks.obsidian, 'B', Items.redstone
+		);
+		
+    if(FMLCommonHandler.instance().getSide() == Side.CLIENT){
+	  	Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
+	  	.register(Item.getItemFromBlock(block_generator), 0, new ModelResourceLocation("blockprotectfieldgenerator:generator", "inventory"));
+    }
   }
 }
