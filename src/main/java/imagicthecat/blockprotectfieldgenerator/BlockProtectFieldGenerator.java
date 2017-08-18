@@ -21,6 +21,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -37,6 +38,9 @@ public class BlockProtectFieldGenerator
   public static Block block_generator;
   public static ResourceLocation tex_indicator;
   
+  @SidedProxy(clientSide="imagicthecat.blockprotectfieldgenerator.client.ClientEventHandler", serverSide="imagicthecat.blockprotectfieldgenerator.server.ServerEventHandler")
+  public static ForgeEventHandler event_handler;
+  
   @Instance(BlockProtectFieldGenerator.MODID)
   public static BlockProtectFieldGenerator instance;
   
@@ -51,7 +55,7 @@ public class BlockProtectFieldGenerator
   @EventHandler
   public void init(FMLInitializationEvent event)
   {
-    MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
+    MinecraftForge.EVENT_BUS.register(event_handler);
     //CapabilityManager.INSTANCE.register(IStrings.class, new StringsStorage(), Strings.class);
   	
 		GameRegistry.addRecipe(new ItemStack(block_generator),
