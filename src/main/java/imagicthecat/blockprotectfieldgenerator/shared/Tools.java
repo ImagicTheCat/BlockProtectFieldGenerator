@@ -16,7 +16,8 @@ public class Tools {
 	
 	//search blocks by block in a cube radius
 	//if lazy is true, will stop the research when one block is found
-	public static List<BlockPos> findBlocks(World world, Block block, BlockPos pos, int radius, boolean lazy)
+	//if ignore is not null, this pos will be ignored
+	public static List<BlockPos> findBlocks(World world, Block block, BlockPos pos, int radius, boolean lazy, BlockPos ignore)
 	{
 		List<BlockPos> list = new ArrayList<BlockPos>();
 		
@@ -26,7 +27,7 @@ public class Tools {
 				for(int k = -radius; k <= radius && !done; k++){
 					BlockPos bpos = new BlockPos(pos.getX()+i,pos.getY()+j,pos.getZ()+k);
 					
-					if(world.getBlockState(bpos).getBlock() == block){
+					if(world.getBlockState(bpos).getBlock() == block && (ignore == null || !bpos.equals(ignore))){
 						list.add(bpos);
 						if(lazy)
 							done = true;
@@ -40,7 +41,7 @@ public class Tools {
 
 	public static List<BlockPos> findBlocks(World world, Block block, BlockPos pos, int radius)
 	{
-		return findBlocks(world, block, pos, radius, false);
+		return findBlocks(world, block, pos, radius, false, null);
 	}
 	
 	//check if a blockpos is in an area
@@ -53,12 +54,12 @@ public class Tools {
 	
 	//check if the area at this pos is protected and if the player is allowed or not
 	// return Pair(protected, allowed)
-	public static Pair<Boolean, Boolean> checkArea(EntityPlayer player, BlockPos pos)
+	public static Pair<Boolean, Boolean> checkArea(EntityPlayer player, BlockPos pos, int radius, BlockPos ignore)
 	{
 		boolean _protected = false;
 		boolean allowed = true;
 		
-		List<BlockPos> blocks = findBlocks(player.worldObj, BlockProtectFieldGenerator.block_generator, pos, 8);
+		List<BlockPos> blocks = findBlocks(player.worldObj, BlockProtectFieldGenerator.block_generator, pos, radius, false, ignore);
 		if(!blocks.isEmpty()){
 			_protected = true;
 			
@@ -73,5 +74,10 @@ public class Tools {
 		}
 		
 		return new Pair<Boolean, Boolean>(_protected, allowed);
+	}
+
+	public static Pair<Boolean, Boolean> checkArea(EntityPlayer player, BlockPos pos)
+	{
+		return checkArea(player, pos, 8, null);
 	}
 }
