@@ -9,6 +9,7 @@ import java.util.List;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
@@ -40,6 +41,7 @@ public class Command implements ICommand {
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
 		World world = sender.getEntityWorld();
+		
 		if(!world.isRemote){
 			EntityPlayerMP player = (EntityPlayerMP)sender.getCommandSenderEntity();
 			if(player != null){
