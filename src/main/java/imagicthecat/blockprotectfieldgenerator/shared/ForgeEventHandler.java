@@ -8,11 +8,10 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -37,32 +36,32 @@ public class ForgeEventHandler {
 	@SubscribeEvent
 	public void playerInteract(PlayerInteractEvent evt)
 	{
-			BlockPos pos = evt.pos;
-			if(pos == null && evt.entity != null)
-				pos = evt.entity.getPosition();
+			BlockPos pos = evt.getPos();
+			if(pos == null && evt.getEntity() != null)
+				pos = evt.getEntity().getPosition();
 			
 			//if position valid, target not a generator and not in an allowed area -> prevent interactions
-			if(pos != null && evt.world.getBlockState(pos).getBlock() != BlockProtectFieldGenerator.block_generator && 
-					!Tools.checkArea(evt.entityPlayer, pos).second){
+			if(pos != null && evt.getWorld().getBlockState(pos).getBlock() != BlockProtectFieldGenerator.block_generator && 
+					!Tools.checkArea(evt.getEntityPlayer(), pos).second){
 				evt.setCanceled(true);
 				
-				if(evt.world.isRemote)
-					evt.entityPlayer.addChatMessage(new ChatComponentText("A field generator prevents you from interacting here."));
+				if(evt.getWorld().isRemote)
+					evt.getEntityPlayer().addChatMessage(new TextComponentString("A field generator prevents you from interacting here."));
 			}
 	}
 	
 	@SubscribeEvent
 	public void playerPlace(PlaceEvent evt)
 	{
-		BlockPos pos = evt.pos;
+		BlockPos pos = evt.getPos();
 		
 		//if position valid, target not a generator and not in an allowed area -> prevent interactions
 		if(pos != null && 
-				!Tools.checkArea(evt.player, pos, (evt.placedBlock.getBlock() == BlockProtectFieldGenerator.block_generator ? 16 : 8), pos).second){
+				!Tools.checkArea(evt.getPlayer(), pos, (evt.getPlacedBlock().getBlock() == BlockProtectFieldGenerator.block_generator ? 16 : 8), pos).second){
 			evt.setCanceled(true);
 			
-			if(evt.placedBlock.getBlock() == BlockProtectFieldGenerator.block_generator)
-				evt.player.addChatMessage(new ChatComponentText("A field generator prevents you from placing another generator here."));
+			if(evt.getPlacedBlock().getBlock() == BlockProtectFieldGenerator.block_generator)
+				evt.getPlayer().addChatMessage(new TextComponentString("A field generator prevents you from placing another generator here."));
 		}
 	}
 	
@@ -70,8 +69,8 @@ public class ForgeEventHandler {
 	public void explosion(ExplosionEvent.Start evt)
 	{
 		//protected area prevents explosions
-		System.out.println(evt.explosion.getPosition());
-		if(!Tools.findBlocks(evt.world, BlockProtectFieldGenerator.block_generator, new BlockPos(evt.explosion.getPosition()), 14, true, null).isEmpty())
+		System.out.println(evt.getExplosion().getPosition());
+		if(!Tools.findBlocks(evt.getWorld(), BlockProtectFieldGenerator.block_generator, new BlockPos(evt.getExplosion().getPosition()), 14, true, null).isEmpty())
 			evt.setCanceled(true);
 	}
 }

@@ -11,8 +11,9 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -39,7 +40,14 @@ public class Command implements ICommand {
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) {
+	public boolean isUsernameIndex(String[] args, int index) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void execute(MinecraftServer server, ICommandSender sender,
+			String[] args) throws CommandException {
 		World world = sender.getEntityWorld();
 		
 		if(!world.isRemote){
@@ -55,31 +63,23 @@ public class Command implements ICommand {
 						count++;
 					}
 					
-					player.addChatMessage(new ChatComponentText("Allowed on "+count+" generators."));
+					player.addChatMessage(new TextComponentString("Allowed on "+count+" generators."));
 				}
 				else
-					player.addChatMessage(new ChatComponentText("Unknown subcommand."));
+					player.addChatMessage(new TextComponentString("Unknown subcommand."));
 			}
 		}
 	}
 
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return (sender.getCommandSenderEntity() != null 
-				&& FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().canSendCommands(((EntityPlayerMP)sender.getCommandSenderEntity()).getGameProfile()));
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+		return sender.canCommandSenderUseCommand(4, this.getCommandName());
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender,
-			String[] args, BlockPos pos) {
-		// TODO Auto-generated method stub
+	public List<String> getTabCompletionOptions(MinecraftServer server,
+			ICommandSender sender, String[] args, BlockPos pos) {
 		return new ArrayList<String>();
-	}
-
-	@Override
-	public boolean isUsernameIndex(String[] args, int index) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

@@ -9,7 +9,7 @@ import imagicthecat.blockprotectfieldgenerator.shared.capability.StringsStorage;
 import imagicthecat.blockprotectfieldgenerator.shared.tileentity.TileFieldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -62,7 +62,7 @@ public class BlockProtectFieldGenerator
 		  "A A",
 		  " B ",
 		  "A A",
-		  'A', Blocks.obsidian, 'B', Items.redstone
+		  'A', Blocks.OBSIDIAN, 'B', Items.REDSTONE
 		);
 		
     if(FMLCommonHandler.instance().getSide() == Side.CLIENT){

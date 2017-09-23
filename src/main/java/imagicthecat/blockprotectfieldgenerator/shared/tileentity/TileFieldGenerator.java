@@ -1,14 +1,10 @@
 package imagicthecat.blockprotectfieldgenerator.shared.tileentity;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileFieldGenerator extends TileEntity {
@@ -24,7 +20,7 @@ public class TileFieldGenerator extends TileEntity {
 		if(!allowed_users.contains(user))
 			allowed_users.add(user);
 		
-		this.worldObj.markBlockForUpdate(this.pos);
+		this.worldObj.notifyBlockUpdate(this.pos, this.worldObj.getBlockState(this.pos), this.worldObj.getBlockState(this.pos), 2);
 		this.markDirty();
 	}
 	
@@ -37,7 +33,7 @@ public class TileFieldGenerator extends TileEntity {
 	{
 		allowed_users.clear();
 		
-		this.worldObj.markBlockForUpdate(this.pos);
+		this.worldObj.notifyBlockUpdate(this.pos, this.worldObj.getBlockState(this.pos), this.worldObj.getBlockState(this.pos), 2);
 		this.markDirty();
 	}
 	
@@ -47,7 +43,7 @@ public class TileFieldGenerator extends TileEntity {
 	}
 	
   @Override
-  public void writeToNBT(NBTTagCompound tag) 
+  public NBTTagCompound writeToNBT(NBTTagCompound tag) 
   {
   	super.writeToNBT(tag);
   	
@@ -60,6 +56,8 @@ public class TileFieldGenerator extends TileEntity {
 			tag.setString("s"+i, u);
 			i++;
 		}
+		
+		return tag;
   }
   
   @Override
@@ -75,15 +73,25 @@ public class TileFieldGenerator extends TileEntity {
   }
   
   @Override
-  public Packet getDescriptionPacket() 
+  public NBTTagCompound getUpdateTag()
   {
-    NBTTagCompound tag = new NBTTagCompound();
-    writeToNBT(tag);
-    return new S35PacketUpdateTileEntity(this.pos, 1, tag);
+  	return writeToNBT(new NBTTagCompound());
   }
   
   @Override
-  public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) 
+  public void handleUpdateTag(NBTTagCompound tag)
+  {
+  	readFromNBT(tag);
+  }
+  
+  @Override
+  public SPacketUpdateTileEntity getUpdatePacket() 
+  {
+    return new SPacketUpdateTileEntity(this.pos, 1, writeToNBT(new NBTTagCompound()));
+  }
+  
+  @Override
+  public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) 
   {
     readFromNBT(pkt.getNbtCompound());
   }
