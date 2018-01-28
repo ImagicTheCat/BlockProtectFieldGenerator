@@ -43,7 +43,8 @@ public class ForgeEventHandler {
 			//if position valid, target not a generator and not in an allowed area -> prevent interactions
 			if(pos != null && evt.getWorld().getBlockState(pos).getBlock() != BlockProtectFieldGenerator.block_generator && 
 					!Tools.checkArea(evt.getEntityPlayer(), pos).second){
-				evt.setCanceled(true);
+				if(evt.isCancelable())
+					evt.setCanceled(true);
 				
 				if(evt.getWorld().isRemote)
 					evt.getEntityPlayer().addChatMessage(new TextComponentString("A field generator prevents you from interacting here."));
